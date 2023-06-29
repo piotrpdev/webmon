@@ -17,11 +17,21 @@ Run `oc create -f ./scripts/website-status-topic.yaml`
 ### Change Kafka config
 Change config details in `src/main/resources/kafka_config_example.yaml` to match your environment and rename the file to `kafka_config.yaml`.
 
+The Python server requires you to convert the `JKS` file to `PEM` format. You can do this using the provided `convert_jks_to_pem.sh` script. [See this for more details](https://dev.to/adityakanekar/connecting-to-kafka-cluster-using-ssl-with-python-k2e).
+
+### Install Python dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
 ## Build
 
 Run the Gradle build task.
 
 ## Usage
+
+### Start the producer
 
 ```bash
 # Run this in the 'website-monitor' project

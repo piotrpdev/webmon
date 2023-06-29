@@ -1,3 +1,5 @@
 bootstrapServers: "<CLUSTER_NAME>.apps.eu46a.prod.ole.redhat.com:443"
 sslTruststoreLocation: "/home/pplaczek/AD482/truststore.jks"
 sslTruststorePassword: "password"
+sslCaLocation: "/home/pplaczek/AD482/pem/CARoot.pem"
+sslCertificateLocation: "/home/pplaczek/AD482/pem/certificate.pem"

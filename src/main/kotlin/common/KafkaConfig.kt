@@ -12,6 +12,8 @@ data class KafkaConnectionConfig(
     val bootstrapServers: String,
     val sslTruststoreLocation: String,
     val sslTruststorePassword: String,
+    val sslCaLocation: String,
+    val sslCertificateLocation: String,
 )
 
 object KafkaConfig {
@@ -21,12 +23,13 @@ object KafkaConfig {
     fun getCommonConfig(): Properties {
         val props = Properties()
 
+        // TODO: Move all of these to the config file
         props[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = connectionConfig.bootstrapServers
 
         props[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = "org.apache.kafka.common.serialization.StringSerializer"
-        props[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] = "org.apache.kafka.common.serialization.IntegerSerializer"
+        props[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] = "org.apache.kafka.common.serialization.StringSerializer"
         props[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = "org.apache.kafka.common.serialization.StringDeserializer"
-        props[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = "org.apache.kafka.common.serialization.IntegerDeserializer"
+        props[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = "org.apache.kafka.common.serialization.StringDeserializer"
 
         props[ConsumerConfig.GROUP_ID_CONFIG] = "$topicName-consumer-group"
         props[ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG] = "false"

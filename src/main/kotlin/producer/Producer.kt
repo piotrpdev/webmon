@@ -11,9 +11,10 @@ import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.clients.producer.ProducerRecord
 import java.net.HttpURLConnection
 import java.net.URL
+import java.time.Instant
 
 object Producer {
-    val producer: Producer<String, Int> = KafkaProducer(
+    val producer: Producer<String, String> = KafkaProducer(
         getCommonConfig()
     )
 
@@ -28,7 +29,7 @@ object Producer {
                     val record = ProducerRecord(
                         topicName,
                         url,
-                        statusCode
+                        "${Instant.now()} $statusCode"
                     )
 
                     producer.send(record)
@@ -42,7 +43,7 @@ object Producer {
         deferred.awaitAll()
     }
 
-    fun printRecord(record: ProducerRecord<String, Int>) {
+    fun printRecord(record: ProducerRecord<String, String>) {
         println("Sent record:")
         println("\tTopic = " + record.topic())
         println("\tPartition = " + record.partition())

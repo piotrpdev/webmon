@@ -8,8 +8,8 @@ import java.time.Duration
 
 object Consumer {
     fun consume() {
-        val consumer: Consumer<Void, Int> =
-            KafkaConsumer<Void, Int>(getCommonConfig())
+        val consumer: Consumer<String, String> =
+            KafkaConsumer(getCommonConfig())
 
         consumer.subscribe(listOf(topicName))
 
