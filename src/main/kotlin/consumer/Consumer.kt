@@ -17,7 +17,7 @@ object Consumer {
             println("Waiting for events...")
             val records = consumer.poll(Duration.ofMillis(10000))
             for (record in records) {
-                println("Received $topicName: " + record.value())
+                println("Status for '${record.key()}' = " + record.value())
             }
         }
     }

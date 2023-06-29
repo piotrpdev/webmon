@@ -35,7 +35,14 @@ fun main(args: Array<String>) {
     }
 
     if (produceArgs.url_list.isNotEmpty()) {
-        produce()
+        val httpList = produceArgs.url_list.map { url ->
+            if (!url.startsWith("http://") && !url.startsWith("https://")) {
+                "http://$url"
+            } else {
+                url
+            }
+        }
+        produce(httpList)
     } else {
         consume()
     }

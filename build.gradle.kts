@@ -14,6 +14,7 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
 
     implementation("org.apache.kafka:kafka-clients:3.5.0")
     implementation("org.slf4j:slf4j-simple:2.0.7")
