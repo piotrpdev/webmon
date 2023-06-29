@@ -2,8 +2,9 @@ package producer
 
 import common.KafkaConfig.getCommonConfig
 import common.KafkaConfig.topicName
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.Producer
@@ -12,14 +13,14 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 object Producer {
-    fun produce(urls: List<String>) = runBlocking {
-        val producer: Producer<String, Int> = KafkaProducer(
-            getCommonConfig()
-        )
+    val producer: Producer<String, Int> = KafkaProducer(
+        getCommonConfig()
+    )
 
-        launch {
-            while (true) {
-                for (url in urls) {
+    fun produce(urls: List<String>) = runBlocking {
+        val deferred = urls.map { url ->
+            async {
+                while (true) {
                     val urlObject = URL(url)
                     val http: HttpURLConnection = urlObject.openConnection() as HttpURLConnection
                     val statusCode: Int = http.responseCode
@@ -32,11 +33,13 @@ object Producer {
 
                     producer.send(record)
                     printRecord(record)
+
+                    delay(2000)
                 }
-                delay(5000)
             }
-            producer.close()
         }
+
+        deferred.awaitAll()
     }
 
     fun printRecord(record: ProducerRecord<String, Int>) {

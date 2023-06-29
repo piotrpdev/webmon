@@ -1,6 +1,9 @@
 import consumer.Consumer.consume
 import kotlinx.cli.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import producer.Producer.produce
+import producer.Producer.producer
 
 @OptIn(ExperimentalCli::class)
 fun main(args: Array<String>) {
@@ -35,6 +38,14 @@ fun main(args: Array<String>) {
     }
 
     if (produceArgs.url_list.isNotEmpty()) {
+        Runtime.getRuntime().addShutdownHook(object : Thread() {
+            override fun run() = runBlocking {
+                println("Gracefully shutting down")
+                producer.close()
+                println("Kafka connection closed")
+                delay(1000)
+            }
+        })
         val httpList = produceArgs.url_list.map { url ->
             if (!url.startsWith("http://") && !url.startsWith("https://")) {
                 "http://$url"
