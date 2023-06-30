@@ -21,7 +21,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-cli:0.3.5")
     implementation("com.sksamuel.hoplite:hoplite-yaml:2.7.4")
     implementation("com.sksamuel.hoplite:hoplite-core:2.7.4")
-
+    implementation("org.postgresql:postgresql:42.6.0")
 }
 
 tasks.test {

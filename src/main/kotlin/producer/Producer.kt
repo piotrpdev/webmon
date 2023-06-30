@@ -17,11 +17,12 @@ object Producer {
     val producer: Producer<String, String> = KafkaProducer(
         getCommonConfig()
     )
+    var producerIsAlive = true
 
     fun produce(urls: List<String>) = runBlocking {
         val deferred = urls.map { url ->
             async {
-                while (true) {
+                while (producerIsAlive) {
                     val urlObject = URL(url)
                     val http: HttpURLConnection = urlObject.openConnection() as HttpURLConnection
                     val statusCode: Int = http.responseCode

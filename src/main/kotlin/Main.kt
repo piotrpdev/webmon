@@ -1,9 +1,11 @@
+
 import consumer.Consumer.consume
 import kotlinx.cli.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import producer.Producer.produce
 import producer.Producer.producer
+import producer.Producer.producerIsAlive
 
 @OptIn(ExperimentalCli::class)
 fun main(args: Array<String>) {
@@ -41,6 +43,7 @@ fun main(args: Array<String>) {
         Runtime.getRuntime().addShutdownHook(object : Thread() {
             override fun run() = runBlocking {
                 println("Gracefully shutting down")
+                producerIsAlive = false
                 producer.close()
                 println("Kafka connection closed")
                 delay(1000)
@@ -55,6 +58,15 @@ fun main(args: Array<String>) {
         }
         produce(httpList)
     } else {
+        Runtime.getRuntime().addShutdownHook(object : Thread() {
+            override fun run() = runBlocking {
+                println("Gracefully shutting down")
+//                consumerIsAlive = false
+//                consumer.close()
+                println("Kafka connection closed")
+                delay(1000)
+            }
+        })
         consume()
     }
 

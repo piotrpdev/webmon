@@ -14,6 +14,9 @@ data class KafkaConnectionConfig(
     val sslTruststorePassword: String,
     val sslCaLocation: String,
     val sslCertificateLocation: String,
+    val postgresAddress: String,
+    val postgresUsername: String,
+    val postgresPassword: String,
 )
 
 object KafkaConfig {
