@@ -11,7 +11,9 @@ import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.clients.producer.ProducerRecord
 import java.net.HttpURLConnection
 import java.net.URL
-import java.time.Instant
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
+import java.time.temporal.ChronoUnit
 
 object Producer {
     val producer: Producer<String, String> = KafkaProducer(
@@ -30,7 +32,7 @@ object Producer {
                     val record = ProducerRecord(
                         topicName,
                         url,
-                        "${Instant.now().toString().substring(0, 26)}Z $statusCode" // account for pgsql timestamp precision
+                        "${OffsetDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.MICROS)} $statusCode" // account for pgsql timestamp precision
                     )
 
                     producer.send(record)

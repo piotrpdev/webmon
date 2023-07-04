@@ -8,6 +8,7 @@ import org.apache.kafka.clients.consumer.KafkaConsumer
 import java.sql.DriverManager
 import java.sql.SQLException
 import java.time.Duration
+import java.time.OffsetDateTime
 
 
 object Consumer {
@@ -81,7 +82,7 @@ object Consumer {
                         val id = resultSet.getInt("id")
                         val url = resultSet.getString("url")
                         val http_status = resultSet.getInt("http_status")
-                        val recorded_at = resultSet.getString("recorded_at")
+                        val recorded_at = resultSet.getObject("recorded_at", OffsetDateTime::class.java)
                         val obj = WebsiteStatus(id, url, http_status, recorded_at)
                         result.add(obj)
                     }
@@ -110,7 +111,7 @@ object Consumer {
                         val id = resultSet.getInt("id")
                         val url = resultSet.getString("url")
                         val http_status = resultSet.getInt("http_status")
-                        val recorded_at = resultSet.getString("recorded_at")
+                        val recorded_at = resultSet.getObject("recorded_at", OffsetDateTime::class.java)
                         val obj = WebsiteStatus(id, url, http_status, recorded_at)
                         result = obj
                     }
@@ -125,7 +126,7 @@ object Consumer {
         return result
     }
 
-    fun insertWebsiteStatus(url: String, http_status: Int, recorded_at: String) {
+    fun insertWebsiteStatus(url: String, http_status: Int, recorded_at: OffsetDateTime) {
         // https://www.postgresqltutorial.com/postgresql-jdbc/insert/
         val SQL_INSERT = "INSERT INTO public.\"website-status\"(url, http_status, recorded_at) VALUES (?, ?, ?)"
 
@@ -136,7 +137,7 @@ object Consumer {
                 conn.prepareStatement(SQL_INSERT).use { preparedStatement ->
                     preparedStatement.setString(1, url)
                     preparedStatement.setInt(2, http_status)
-                    preparedStatement.setString(3, recorded_at)
+                    preparedStatement.setObject(3, recorded_at)
                     preparedStatement.executeUpdate()
                 }
             }
@@ -160,7 +161,7 @@ object Consumer {
                     websiteStatusBatch.forEach { (_, url, http_status, recorded_at) ->
                         preparedStatement.setString(1, url)
                         preparedStatement.setInt(2, http_status)
-                        preparedStatement.setString(3, recorded_at)
+                        preparedStatement.setObject(3, recorded_at)
                         preparedStatement.addBatch()
                         count++
 
@@ -198,7 +199,7 @@ object Consumer {
             println("Got $recordsCount records")
             for (record in records) {
                 val recordSplit = record.value().split(spaceRegex)
-                val recordTime = recordSplit[0]
+                val recordTime = OffsetDateTime.parse(recordSplit[0])
                 val recordStatus = recordSplit[1].toInt()
 
                 println("Status for '${record.key()}' in partition ${record.partition()} = " + record.value())
@@ -207,7 +208,7 @@ object Consumer {
                     websiteStatusBatch.add(WebsiteStatus(-1, record.key(), recordStatus, recordTime))
                 }
 
-                if (!latestInDbFoundInTopic && latestInDbTime != null && recordTime == latestInDbTime) {
+                if (!latestInDbFoundInTopic && latestInDbTime != null && recordTime.toString() == latestInDbTime) {
                     println("Lastest DB record found in topic! Adding records to DB from now on")
                     latestInDbFoundInTopic = true
                 }
@@ -221,9 +222,10 @@ object Consumer {
     }
 
     fun consume() {
-        //val parsedTime = "2023-07-04T13:12:33.729338Z"
-        //println("Parsed time: $parsedTime")
-        //insertWebsiteStatus("http://httpd-2-website-monitor.apps.eu46a.prod.ole.redhat.com'", 200, parsedTime)
+//        val offsetNow = OffsetDateTime.parse("2023-07-04T13:12:33.729338Z")
+//        println("Offset now: $offsetNow")
+//        insertWebsiteStatus("http://httpd-2-website-monitor.apps.eu46a.prod.ole.redhat.com'", 200, offsetNow)
+//        createWebsiteStatusTable()
         preConsumerDbCount = selectCount()
         println("Pre-consumer DB count: $preConsumerDbCount")
         if (preConsumerDbCount == 0) {

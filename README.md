@@ -25,6 +25,17 @@ The Python server requires you to convert the `JKS` file to `PEM` format. You ca
 pip install -r requirements.txt
 ```
 
+### Setup PostgreSQL database and Grafana
+
+> Courtesy of [https://blog.devgenius.io/how-to-setup-grafana-with-postgresql-database-using-docker-compose-a-step-by-step-guide-e5a9cce90ba3](https://blog.devgenius.io/how-to-setup-grafana-with-postgresql-database-using-docker-compose-a-step-by-step-guide-e5a9cce90ba3)
+
+> Default Grafana credentials: `admin:admin`
+
+```bash
+cd ./scripts/
+sudo docker-compose up -d
+```
+
 ## Build
 
 Run the Gradle build task.
