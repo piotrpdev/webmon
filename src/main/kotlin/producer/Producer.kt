@@ -30,7 +30,7 @@ object Producer {
                     val record = ProducerRecord(
                         topicName,
                         url,
-                        "${Instant.now()} $statusCode"
+                        "${Instant.now().toString().substring(0, 26)}Z $statusCode" // account for pgsql timestamp precision
                     )
 
                     producer.send(record)

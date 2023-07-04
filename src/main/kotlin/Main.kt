@@ -1,5 +1,7 @@
 
 import consumer.Consumer.consume
+import consumer.Consumer.consumerIsAlive
+import consumer.Consumer.kafkaConsumer
 import kotlinx.cli.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
@@ -61,8 +63,8 @@ fun main(args: Array<String>) {
         Runtime.getRuntime().addShutdownHook(object : Thread() {
             override fun run() = runBlocking {
                 println("Gracefully shutting down")
-//                consumerIsAlive = false
-//                consumer.close()
+                consumerIsAlive = false
+                kafkaConsumer.close()
                 println("Kafka connection closed")
                 delay(1000)
             }

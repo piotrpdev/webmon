@@ -35,6 +35,8 @@ object KafkaConfig {
         props[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = "org.apache.kafka.common.serialization.StringDeserializer"
 
         props[ConsumerConfig.GROUP_ID_CONFIG] = "$topicName-consumer-group"
+        //props[ConsumerConfig.GROUP_INSTANCE_ID_CONFIG] = "consumer-$topicName-consumer-group-1-${UUID.randomUUID()}"
+
         props[ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG] = "false"
         props[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = "earliest"
 

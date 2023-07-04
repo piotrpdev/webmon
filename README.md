@@ -37,3 +37,8 @@ Run the Gradle build task.
 # Run this in the 'website-monitor' project
 oc get routes -o yaml -o custom-columns=":spec.host" | xargs java -jar webmon-1.0-SNAPSHOT.jar produce
 ```
+
+## Future considerations
+
+- [ ] Figure out how to efficiently use more than one partition
+- [ ] Make consumer code thread-safe
