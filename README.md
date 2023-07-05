@@ -43,6 +43,16 @@ Run the Gradle build task.
 oc get routes -o yaml -o custom-columns=":spec.host" | xargs java -jar webmon-1.0-SNAPSHOT.jar produce
 ```
 
+### Start the consumer
+```bash
+# Run this in the 'website-monitor' project
+oc get routes -o yaml -o custom-columns=":spec.host" | xargs java -jar webmon-1.0-SNAPSHOT.jar consume
+```
+
+### Go to Grafana
+
+Go to `http://localhost:3001` and login with the default credentials.
+
 ## Future considerations
 
 - [ ] Figure out how to efficiently use more than one partition
