@@ -1,8 +1,6 @@
 bootstrapServers: "<CLUSTER_NAME>.apps.eu46a.prod.ole.redhat.com:443"
 sslTruststoreLocation: "/home/pplaczek/AD482/truststore.jks"
 sslTruststorePassword: "password"
-sslCaLocation: "/home/pplaczek/AD482/pem/CARoot.pem"
-sslCertificateLocation: "/home/pplaczek/AD482/pem/certificate.pem"
 postgresAddress: "jdbc:postgresql://127.0.0.1:5488/my_data_wh_db"
 postgresUsername: "my_data_wh_user"
 postgresPassword: "my_data_wh_pwd"
