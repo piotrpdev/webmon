@@ -1,4 +1,4 @@
-![example](.github/img/example.png)
+![example](.github/img/example2.png)
 
 # Webmon
 
